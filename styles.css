@@ -1,13 +1,35 @@
+/* ============ шрифт ============ */
+@font-face{
+  font-family:'Courier New Local';
+  src:url('assets/fonts/CourierNew-Regular.ttf') format('truetype');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Courier New Local';
+  src:url('assets/fonts/CourierNew-Bold.ttf') format('truetype');
+  font-weight:700;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Courier New Local';
+  src:url('assets/fonts/CourierNew-Italic.ttf') format('truetype');
+  font-weight:400;font-style:italic;font-display:swap;
+}
+@font-face{
+  font-family:'Courier New Local';
+  src:url('assets/fonts/CourierNew-BoldItalic.ttf') format('truetype');
+  font-weight:700;font-style:italic;font-display:swap;
+}
+
 /* ============ base ============ */
 :root{
   --ink:#0a0a0a;
   --mute:#8f8f8f;
   --line:#c9c9c9;
   --bg:#fff;
-  --mono:'Courier Prime','Courier New',ui-monospace,monospace;
+  --mono:'Courier New Local','Courier New',Courier,monospace;
   --head-h:150px;
   /* верхний кончик крестика = активная точка курсора */
-  --cursor:url("assets/cursor-artasimn.svg") 5 0, auto;
+  --cursor:url("cursor-artasimn.svg") 5 0, auto;
 }
 
 *{box-sizing:border-box}
@@ -17,6 +39,7 @@ body{
   background:var(--bg);
   color:var(--ink);
   font-family:var(--mono);
+  font-weight:400;
   font-size:13px;
   letter-spacing:.06em;
   cursor:var(--cursor);
@@ -66,6 +89,7 @@ img{display:block;max-width:100%}
   margin:0 8px;
 }
 .logo__mark{height:26px;width:auto}
+.logo__text{font-size:20px;letter-spacing:.1em}
 .logo__www,.logo__com{font-size:11px;letter-spacing:.05em;padding-bottom:2px}
 
 /* ---- nav ---- */
@@ -99,6 +123,7 @@ img{display:block;max-width:100%}
   padding:40px 20px 26px;
   font-size:12px;
 }
+.foot[hidden]{display:none}
 .foot span{opacity:.5}
 .foot a:hover{opacity:.55}
 
@@ -112,42 +137,45 @@ img{display:block;max-width:100%}
 .card{position:relative;display:block}
 .card__frame{
   position:relative;
-  height:330px;
+  aspect-ratio:1/1;              /* строго квадрат */
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
 }
 .card__frame img{
-  max-height:100%;width:auto;object-fit:contain;
-  transition:opacity .18s ease;
+  max-width:100%;max-height:100%;width:auto;height:auto;
+  object-fit:contain;
 }
 .card__zones{position:absolute;inset:0;display:flex}
 .card__zones span{flex:1}
+
+/* закладка в углу фото — только при наведении на товар */
+.card__mark{
+  position:absolute;top:10px;right:10px;z-index:3;
+  width:16px;height:18px;
+  opacity:0;transition:opacity .15s;
+}
+.card:hover .card__mark,.card__mark.is-on{opacity:1}
+.card__mark img{width:16px;height:auto;position:relative;z-index:2}
+.card__mark::after{                /* полностью чёрная закладка после нажатия */
+  content:'';position:absolute;left:1px;right:1px;top:1px;bottom:1px;
+  background:var(--ink);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);
+  opacity:0;transition:opacity .15s;
+}
+.card__mark.is-on::after{opacity:1}
+
 .card__meta{
   margin-top:18px;text-align:center;
   opacity:0;transition:opacity .18s ease;
   pointer-events:none;
 }
-.card:hover .card__meta,.card.is-touched .card__meta{opacity:1}
+.card:hover .card__meta{opacity:1}
 .card__title{font-size:13px}
 .card__price{margin-top:6px;font-size:13px}
 
 .dots{display:flex;justify-content:center;gap:22px;margin-bottom:14px}
 .dots i{display:block;width:46px;height:2px;background:var(--line)}
 .dots i.on{background:var(--ink)}
-
-/* закладка сбоку каталога */
-.side-bookmark{
-  position:fixed;right:34px;top:calc(var(--head-h) + 40px);z-index:15;
-  width:20px;height:22px;opacity:.8;
-}
-.side-bookmark:hover{opacity:1}
-.side-bookmark img{width:16px}
-.side-bookmark.is-on img{filter:none}
-.side-bookmark.is-on::after{
-  content:'';position:absolute;left:3px;right:3px;top:4px;bottom:6px;
-  background:var(--ink);
-  clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);
-}
 
 /* ============ product (yeezy-style) ============ */
 .pdp{
@@ -235,19 +263,16 @@ img{display:block;max-width:100%}
 @media (max-width:900px){
   :root{--head-h:140px}
   .catalog{grid-template-columns:repeat(2,1fr);gap:70px 5vw;padding-top:30px}
-  .card__frame{height:230px}
   .gallery{height:auto;width:min(76vw,420px)}
   .gallery__arrow--prev{left:-8px}
   .gallery__arrow--next{right:-8px}
-  .side-bookmark{right:16px}
 }
 @media (max-width:560px){
   .catalog{grid-template-columns:1fr;gap:56px}
-  .card__frame{height:280px}
   .watermark{width:60vw;opacity:.04}
 }
 
-/* на тач-устройствах нет наведения — подписи видны всегда */
+/* на тач-устройствах нет наведения — подписи и закладка видны всегда */
 @media (hover:none){
-  .card__meta{opacity:1}
+  .card__meta,.card__mark{opacity:1}
 }

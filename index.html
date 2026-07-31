@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARTASIMN</title>
+<meta name="description" content="artasimn — украшения из серебра и одежда ручной работы.">
+<link rel="icon" href="assets/symbol.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<img class="watermark" src="assets/symbol.svg" alt="">
+
+<header class="head">
+  <div class="head__row">
+    <button class="icon-btn" id="view-models" title="view with models" aria-label="view with models">
+      <img src="assets/icons/account.svg" alt="">
+    </button>
+    <button class="icon-btn" id="view-products" title="view with products" aria-label="view with products">
+      <img src="assets/icons/grid.svg" alt="">
+    </button>
+
+    <a class="logo" href="#/" aria-label="artasimn">
+      <span class="logo__www">www</span>
+      <img class="logo__mark" src="assets/artasimn-logo.svg" alt="ARTASIMN">
+      <span class="logo__com">com</span>
+    </a>
+
+    <a class="icon-btn" href="#/bookmarks" title="закладки" aria-label="закладки">
+      <img src="assets/icons/bookmark.svg" alt="">
+    </a>
+    <a class="icon-btn basket-btn" href="#/basket" title="корзина" aria-label="корзина">
+      <img src="assets/icons/basket.svg" alt="">
+      <span class="basket-btn__count" id="basket-count">0</span>
+    </a>
+  </div>
+
+  <nav class="nav">
+    <div class="nav__top">
+      <a class="nav__link" href="#/c/jewellery" data-cat="jewellery">jewellery</a>
+      <a class="nav__link" href="#/c/clothes" data-cat="clothes">clothes</a>
+    </div>
+    <div class="nav__shop">
+      <button class="nav__link nav__all" id="shop-all" aria-expanded="false">
+        <span>shop all</span><span class="chev" id="shop-all-chev">∨</span>
+      </button>
+      <ul class="nav__sub" id="shop-sub" hidden>
+        <li><a class="nav__link" href="#/g/t-shirts">t-shirts <span class="chev">∨</span></a></li>
+        <li><a class="nav__link" href="#/g/jeans">jeans <span class="chev">∨</span></a></li>
+        <li><a class="nav__link" href="#/g/rings">rings <span class="chev">∨</span></a></li>
+        <li><a class="nav__link" href="#/g/bracelets">bracelets <span class="chev">∨</span></a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<footer class="foot">
+  <a href="#/p/about">о создателе</a><span>|</span>
+  <a href="#/p/privacy">политика конфиденциальности</a><span>|</span>
+  <a href="#/p/offer">оферта</a><span>|</span>
+  <a href="#/p/info">инфо</a>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

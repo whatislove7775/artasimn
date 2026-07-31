@@ -27,7 +27,7 @@
   --line:#c9c9c9;
   --bg:#fff;
   --mono:'Courier New Local','Courier New',Courier,monospace;
-  --head-h:150px;
+  --head-h:164px;
   /* верхний кончик крестика = активная точка курсора */
   --cursor:url("cursor-artasimn.svg") 5 0, auto;
 }
@@ -70,27 +70,27 @@ img{display:block;max-width:100%}
   display:flex;align-items:center;justify-content:center;
   gap:14px;
 }
+.head__row .icon-btn[href="#/bookmarks"]{margin-left:16px}
 .icon-btn{
   display:inline-flex;align-items:center;justify-content:center;
-  width:22px;height:22px;position:relative;
+  width:24px;height:24px;position:relative;
   opacity:.85;transition:opacity .15s;
 }
 .icon-btn:hover,.icon-btn.is-active{opacity:1}
-.icon-btn img{width:15px;height:auto}
-.basket-btn img{width:18px}
+.icon-btn img{width:18px;height:auto}
+.basket-btn img{width:21px}
 .basket-btn__count{
-  position:absolute;left:0;right:0;top:56%;
+  position:absolute;left:0;right:0;top:58%;
   transform:translateY(-42%);
-  text-align:center;font-size:9px;line-height:1;letter-spacing:0;
+  text-align:center;font-size:10px;line-height:1;letter-spacing:0;
 }
 
 .logo{
-  display:flex;align-items:center;gap:7px;
-  margin:0 8px;
+  display:flex;align-items:flex-end;gap:9px;
+  margin:0 16px;
 }
-.logo__mark{height:26px;width:auto}
-.logo__text{font-size:20px;letter-spacing:.1em}
-.logo__www,.logo__com{font-size:11px;letter-spacing:.05em;padding-bottom:2px}
+.logo__mark{height:42px;width:auto}
+.logo__www,.logo__com{font-size:13px;letter-spacing:.05em;padding-bottom:9px}
 
 /* ---- nav ---- */
 .nav{
@@ -98,7 +98,7 @@ img{display:block;max-width:100%}
   display:flex;flex-direction:column;align-items:center;
   font-size:13px;
 }
-.nav__top{display:flex;gap:20px}
+.nav__top{display:flex;gap:22px}
 .nav__link{position:relative;padding:2px 0;transition:opacity .15s}
 .nav__link:hover,.nav__link.is-active{opacity:.55}
 .nav__shop{
@@ -261,7 +261,7 @@ img{display:block;max-width:100%}
 
 /* ============ адаптив ============ */
 @media (max-width:900px){
-  :root{--head-h:140px}
+  :root{--head-h:150px}
   .catalog{grid-template-columns:repeat(2,1fr);gap:70px 5vw;padding-top:30px}
   .gallery{height:auto;width:min(76vw,420px)}
   .gallery__arrow--prev{left:-8px}

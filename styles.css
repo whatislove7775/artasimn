@@ -1,0 +1,253 @@
+/* ============ base ============ */
+:root{
+  --ink:#0a0a0a;
+  --mute:#8f8f8f;
+  --line:#c9c9c9;
+  --bg:#fff;
+  --mono:'Courier Prime','Courier New',ui-monospace,monospace;
+  --head-h:150px;
+  /* верхний кончик крестика = активная точка курсора */
+  --cursor:url("assets/cursor-artasimn.svg") 5 0, auto;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--mono);
+  font-size:13px;
+  letter-spacing:.06em;
+  cursor:var(--cursor);
+  overflow-x:hidden;
+}
+a,button,input,select,summary,[role=button]{cursor:var(--cursor)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;padding:0}
+img{display:block;max-width:100%}
+::selection{background:#000;color:#fff}
+
+.watermark{
+  position:fixed;
+  left:-70px;bottom:-40px;
+  width:min(26vw,330px);
+  opacity:.045;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ============ header ============ */
+.head{
+  position:sticky;top:0;z-index:20;
+  background:var(--bg);
+  padding:16px 24px 10px;
+}
+.head__row{
+  display:flex;align-items:center;justify-content:center;
+  gap:14px;
+}
+.icon-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;position:relative;
+  opacity:.85;transition:opacity .15s;
+}
+.icon-btn:hover,.icon-btn.is-active{opacity:1}
+.icon-btn img{width:15px;height:auto}
+.basket-btn img{width:18px}
+.basket-btn__count{
+  position:absolute;left:0;right:0;top:56%;
+  transform:translateY(-42%);
+  text-align:center;font-size:9px;line-height:1;letter-spacing:0;
+}
+
+.logo{
+  display:flex;align-items:center;gap:7px;
+  margin:0 8px;
+}
+.logo__mark{height:26px;width:auto}
+.logo__www,.logo__com{font-size:11px;letter-spacing:.05em;padding-bottom:2px}
+
+/* ---- nav ---- */
+.nav{
+  margin-top:6px;
+  display:flex;flex-direction:column;align-items:center;
+  font-size:13px;
+}
+.nav__top{display:flex;gap:20px}
+.nav__link{position:relative;padding:2px 0;transition:opacity .15s}
+.nav__link:hover,.nav__link.is-active{opacity:.55}
+.nav__shop{
+  margin-top:3px;
+  display:flex;align-items:flex-start;gap:8px;
+}
+.nav__all{display:inline-flex;gap:4px;align-items:baseline}
+.nav__sub{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:4px;
+  text-align:left;
+}
+.nav__sub[hidden]{display:none}
+.chev{font-size:11px;opacity:.9}
+
+/* ============ layout ============ */
+#app{position:relative;z-index:1;min-height:calc(100vh - var(--head-h) - 60px)}
+
+.foot{
+  position:relative;z-index:1;
+  display:flex;justify-content:center;flex-wrap:wrap;gap:10px;
+  padding:40px 20px 26px;
+  font-size:12px;
+}
+.foot span{opacity:.5}
+.foot a:hover{opacity:.55}
+
+/* ============ catalog ============ */
+.catalog{
+  padding:46px 5vw 10px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:120px 4vw;
+}
+.card{position:relative;display:block}
+.card__frame{
+  position:relative;
+  height:330px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.card__frame img{
+  max-height:100%;width:auto;object-fit:contain;
+  transition:opacity .18s ease;
+}
+.card__zones{position:absolute;inset:0;display:flex}
+.card__zones span{flex:1}
+.card__meta{
+  margin-top:18px;text-align:center;
+  opacity:0;transition:opacity .18s ease;
+  pointer-events:none;
+}
+.card:hover .card__meta,.card.is-touched .card__meta{opacity:1}
+.card__title{font-size:13px}
+.card__price{margin-top:6px;font-size:13px}
+
+.dots{display:flex;justify-content:center;gap:22px;margin-bottom:14px}
+.dots i{display:block;width:46px;height:2px;background:var(--line)}
+.dots i.on{background:var(--ink)}
+
+/* закладка сбоку каталога */
+.side-bookmark{
+  position:fixed;right:34px;top:calc(var(--head-h) + 40px);z-index:15;
+  width:20px;height:22px;opacity:.8;
+}
+.side-bookmark:hover{opacity:1}
+.side-bookmark img{width:16px}
+.side-bookmark.is-on img{filter:none}
+.side-bookmark.is-on::after{
+  content:'';position:absolute;left:3px;right:3px;top:4px;bottom:6px;
+  background:var(--ink);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);
+}
+
+/* ============ product (yeezy-style) ============ */
+.pdp{
+  height:calc(100vh - var(--head-h));
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  scrollbar-width:none;
+}
+.pdp::-webkit-scrollbar{display:none}
+
+.pdp__item{
+  height:calc(100vh - var(--head-h));
+  scroll-snap-align:start;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2vh 0;
+}
+.gallery{
+  position:relative;
+  height:min(46vh,430px);
+  aspect-ratio:4/5;
+}
+.gallery__track{
+  display:flex;
+  height:100%;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+.gallery__track::-webkit-scrollbar{display:none}
+.gallery__track img{
+  flex:0 0 100%;width:100%;height:100%;
+  object-fit:cover;scroll-snap-align:center;
+  user-select:none;-webkit-user-drag:none;
+}
+.gallery__arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  font-size:22px;line-height:1;padding:10px;opacity:.75;
+}
+.gallery__arrow:hover{opacity:1}
+.gallery__arrow--prev{left:-52px}
+.gallery__arrow--next{right:-52px}
+.gallery .dots{
+  position:absolute;left:0;right:0;bottom:10px;margin:0;gap:24px;
+}
+.gallery .dots i{background:rgba(255,255,255,.75)}
+.gallery .dots i.on{background:var(--ink)}
+
+.pdp__info{margin-top:18px;text-align:center;width:min(80vw,520px)}
+.pdp__title{font-weight:700;font-size:14px}
+.pdp__price{margin-top:8px;font-size:14px}
+.pdp__sizes-label{margin-top:20px;color:var(--mute);font-size:13px}
+.sizes{display:flex;justify-content:center;gap:32px;margin-top:14px}
+.sizes button{font-weight:700;font-size:13px;padding:2px 4px;border-bottom:1px solid transparent}
+.sizes button.on{border-bottom-color:var(--ink)}
+.sizes button:hover{opacity:.6}
+
+.disclosure{margin-top:20px}
+.disclosure__btn{color:var(--mute);display:inline-flex;gap:5px;align-items:baseline}
+.disclosure__btn:hover{color:var(--ink)}
+.disclosure__body{
+  max-width:420px;margin:12px auto 0;
+  font-size:12px;line-height:1.8;color:#555;text-align:center;
+}
+.add{margin-top:20px;font-weight:700;font-size:14px}
+.add:hover{opacity:.55}
+.add.is-done{opacity:.45}
+
+/* ============ простые страницы ============ */
+.plain{
+  max-width:640px;margin:0 auto;padding:60px 24px 40px;text-align:center;
+  line-height:1.9;font-size:13px;
+}
+.plain h1{font-size:14px;font-weight:700;margin:0 0 22px;letter-spacing:.1em}
+.plain .row{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px 0;border-bottom:1px solid #eee;text-align:left;
+}
+.plain .row img{width:54px;height:auto}
+.plain .row .rm{color:var(--mute)}
+.plain .row .rm:hover{color:var(--ink)}
+.plain .total{margin-top:22px;font-weight:700}
+.plain .empty{color:var(--mute)}
+
+/* ============ адаптив ============ */
+@media (max-width:900px){
+  :root{--head-h:140px}
+  .catalog{grid-template-columns:repeat(2,1fr);gap:70px 5vw;padding-top:30px}
+  .card__frame{height:230px}
+  .gallery{height:auto;width:min(76vw,420px)}
+  .gallery__arrow--prev{left:-8px}
+  .gallery__arrow--next{right:-8px}
+  .side-bookmark{right:16px}
+}
+@media (max-width:560px){
+  .catalog{grid-template-columns:1fr;gap:56px}
+  .card__frame{height:280px}
+  .watermark{width:60vw;opacity:.04}
+}
+
+/* на тач-устройствах нет наведения — подписи видны всегда */
+@media (hover:none){
+  .card__meta{opacity:1}
+}

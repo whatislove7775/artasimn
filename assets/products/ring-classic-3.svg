@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+<rect width="800" height="1000" fill="#ffffff"/>
+<rect x="40" y="40" width="720" height="920" fill="#f4f4f4"/>
+<text x="400" y="500" text-anchor="middle" font-family="Courier New, monospace" font-size="30" fill="#b5b5b5">ring ‘classic’</text>
+<text x="400" y="545" text-anchor="middle" font-family="Courier New, monospace" font-size="22" fill="#cfcfcf">photo 3</text>
+</svg>

@@ -1,5 +1,6 @@
 /* Каталог. Чтобы поменять товар — правь этот файл.
-   photos: путь до фото (можно .jpg/.png — просто положи файлы в assets/products/)
+   photos: путь до фото (можно .jpg/.png — просто положи файлы в assets/products/).
+           первое фото — настоящее, остальные пока серые квадраты (placeholder.svg)
    category: 'jewellery' | 'clothes'
    group: 't-shirts' | 'jeans' | 'rings' | 'bracelets' | 'other'   */
 
@@ -14,9 +15,9 @@ window.PRODUCTS = [
     description:
       'серебро 925, ручная работа. вес ~9 г. каждое кольцо отливается и патинируется вручную, поэтому фактура плетения уникальна.',
     photos: [
-      'assets/products/ring-braid-1.svg',
-      'assets/products/ring-braid-2.svg',
-      'assets/products/ring-braid-3.svg'
+      'assets/products/ring-braid.png',
+      'assets/products/placeholder.svg',
+      'assets/products/placeholder.svg'
     ]
   },
   {
@@ -29,9 +30,9 @@ window.PRODUCTS = [
     description:
       'безрукавка, 100% хлопок 240 г/м², oversize. принт — шелкография, стирка при 30°.',
     photos: [
-      'assets/products/tee-print-1.svg',
-      'assets/products/tee-print-2.svg',
-      'assets/products/tee-print-3.svg'
+      'assets/products/tee-print.png',
+      'assets/products/placeholder.svg',
+      'assets/products/placeholder.svg'
     ]
   },
   {
@@ -44,9 +45,9 @@ window.PRODUCTS = [
     description:
       'серебро 925, ручная работа. крест-пазл, матовая полировка. вес ~12 г. срок изготовления 5–14 дней.',
     photos: [
-      'assets/products/ring-classic-1.svg',
-      'assets/products/ring-classic-2.svg',
-      'assets/products/ring-classic-3.svg'
+      'assets/products/ring-classic.png',
+      'assets/products/placeholder.svg',
+      'assets/products/placeholder.svg'
     ]
   },
   {
@@ -58,9 +59,9 @@ window.PRODUCTS = [
     sizes: ['one size'],
     description: 'карабин из нержавеющей стали, фигурка и кольца в комплекте.',
     photos: [
-      'assets/products/keychain-1.svg',
-      'assets/products/keychain-2.svg',
-      'assets/products/keychain-3.svg'
+      'assets/products/keychain.png',
+      'assets/products/placeholder.svg',
+      'assets/products/placeholder.svg'
     ]
   },
   {
@@ -72,9 +73,9 @@ window.PRODUCTS = [
     sizes: ['one size'],
     description: 'кепка, хлопок, ручная выварка и потёртости. регулируемый ремешок.',
     photos: [
-      'assets/products/cap-1.svg',
-      'assets/products/cap-2.svg',
-      'assets/products/cap-3.svg'
+      'assets/products/cap.png',
+      'assets/products/placeholder.svg',
+      'assets/products/placeholder.svg'
     ]
   },
   {
@@ -86,9 +87,9 @@ window.PRODUCTS = [
     sizes: ['S', 'M', 'L', 'XL'],
     description: 'свитшот, футер трёхнитка, вышивка на груди, укороченный крой.',
     photos: [
-      'assets/products/sweatshirt-1.svg',
-      'assets/products/sweatshirt-2.svg',
-      'assets/products/sweatshirt-3.svg'
+      'assets/products/sweatshirt.png',
+      'assets/products/placeholder.svg',
+      'assets/products/placeholder.svg'
     ]
   }
 ];

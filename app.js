@@ -72,6 +72,8 @@
   function render() {
     const { a, b } = route();
     app.innerHTML = '';
+    // футер — только на главной
+    document.getElementById('foot').hidden = !(a === '' || a === 'c' || a === 'g');
     document.querySelectorAll('.nav__link').forEach(l => l.classList.remove('is-active'));
 
     if (a === 'product') return renderProduct(b);
@@ -107,6 +109,9 @@
         <div class="card__frame">
           <img src="${cover(p)}" alt="${p.title}">
           <div class="card__zones">${p.photos.map(() => '<span></span>').join('')}</div>
+          <button class="card__mark" aria-label="в корзину">
+            <img src="bookmark.svg" alt="">
+          </button>
         </div>
         <div class="card__meta">
           <div class="dots">${p.photos.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>
@@ -127,30 +132,19 @@
         img.src = cover(p);
         dots.forEach((d, j) => d.classList.toggle('on', j === 0));
       };
-      card.onmouseenter = () => setSideBookmark(p.slug);
+
+      // закладка в углу фото: становится полностью чёрной и кладёт товар в корзину
+      const mark = card.querySelector('.card__mark');
+      mark.onclick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        mark.classList.add('is-on');
+        basket.add(p.slug, p.sizes[0]);
+      };
       grid.appendChild(card);
     });
 
     app.appendChild(grid);
-    mountSideBookmark(list[0] && list[0].slug);
-  }
-
-  /* закладка у правого края: сохраняет товар, на который навёл */
-  let sideSlug = null;
-  function mountSideBookmark(initial) {
-    const btn = document.createElement('button');
-    btn.className = 'side-bookmark';
-    btn.id = 'side-bookmark';
-    btn.title = 'в закладки';
-    btn.innerHTML = '<img src="assets/icons/bookmark.svg" alt="">';
-    btn.onclick = () => { if (sideSlug) { marks.toggle(sideSlug); paintSideBookmark(); } };
-    app.appendChild(btn);
-    setSideBookmark(initial);
-  }
-  function setSideBookmark(slug) { sideSlug = slug || sideSlug; paintSideBookmark(); }
-  function paintSideBookmark() {
-    const btn = document.getElementById('side-bookmark');
-    if (btn) btn.classList.toggle('is-on', !!sideSlug && marks.has(sideSlug));
   }
 
   /* ---------- страница товара ---------- */

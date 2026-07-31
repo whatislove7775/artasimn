@@ -5,36 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARTASIMN</title>
 <meta name="description" content="artasimn — украшения из серебра и одежда ручной работы.">
-<link rel="icon" href="assets/symbol.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/favicon-white.svg">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<img class="watermark" src="assets/symbol.svg" alt="">
+<img class="watermark" src="short%20symbol.svg" alt="">
 
 <header class="head">
   <div class="head__row">
     <button class="icon-btn" id="view-models" title="view with models" aria-label="view with models">
-      <img src="assets/icons/account.svg" alt="">
+      <img src="view%20with%20models.svg" alt="">
     </button>
     <button class="icon-btn" id="view-products" title="view with products" aria-label="view with products">
-      <img src="assets/icons/grid.svg" alt="">
+      <img src="view%20with%20products.svg" alt="">
     </button>
 
     <a class="logo" href="#/" aria-label="artasimn">
       <span class="logo__www">www</span>
-      <img class="logo__mark" src="assets/artasimn-logo.svg" alt="ARTASIMN">
+      <img class="logo__mark" src="artasimn-logo.svg" alt="ARTASIMN"
+           onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logo__text',textContent:'ARTASIMN'}))">
       <span class="logo__com">com</span>
     </a>
 
     <a class="icon-btn" href="#/bookmarks" title="закладки" aria-label="закладки">
-      <img src="assets/icons/bookmark.svg" alt="">
+      <img src="bookmark.svg" alt="">
     </a>
     <a class="icon-btn basket-btn" href="#/basket" title="корзина" aria-label="корзина">
-      <img src="assets/icons/basket.svg" alt="">
+      <img src="basket.svg" alt="">
       <span class="basket-btn__count" id="basket-count">0</span>
     </a>
   </div>
@@ -60,7 +58,7 @@
 
 <main id="app"></main>
 
-<footer class="foot">
+<footer class="foot" id="foot" hidden>
   <a href="#/p/about">о создателе</a><span>|</span>
   <a href="#/p/privacy">политика конфиденциальности</a><span>|</span>
   <a href="#/p/offer">оферта</a><span>|</span>

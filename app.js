@@ -120,7 +120,8 @@
           <div class="photo" role="img" aria-label="${p.title}"></div>
           <div class="card__zones">${p.photos.map(() => '<span></span>').join('')}</div>
           <button class="card__mark" aria-label="в избранное" title="в избранное">
-            <img src="bookmark.svg" alt="">
+            <img class="card__mark-off" src="bookmark.svg" alt="">
+            <img class="card__mark-on" src="bookmark-filled.svg" alt="">
           </button>
         </div>
         <div class="card__meta">
@@ -181,7 +182,7 @@
       <div class="gallery">
         <div class="gallery__track">
           ${p.photos.map(src => `<div class="gallery__slide photo" role="img" aria-label="${p.title}"
-             style="background-image:url('${encodeURI(src)}')"></div>`).join('')}
+             style="background-image:url('${encodeURI(src)}')"><span class="shield"></span></div>`).join('')}
         </div>
         <div class="dots">${p.photos.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>
         <button class="gallery__arrow gallery__arrow--prev" aria-label="назад">&#8249;</button>
@@ -226,13 +227,21 @@
     let down = false, x0 = 0, l0 = 0;
     track.addEventListener('pointerdown', e => {
       down = true; x0 = e.clientX; l0 = track.scrollLeft;
+      // на время перетаскивания снимаем прилипание, иначе оно возвращает ленту назад
+      track.style.scrollSnapType = 'none';
       track.setPointerCapture(e.pointerId);
     });
     track.addEventListener('pointermove', e => {
       if (!down) return;
       track.scrollLeft = l0 - (e.clientX - x0);
     });
-    const up = () => { if (down) { down = false; go(index()); } };
+    const up = () => {
+      if (!down) return;
+      down = false;
+      const i = index();
+      track.style.scrollSnapType = '';
+      go(i);
+    };
     track.addEventListener('pointerup', up);
     track.addEventListener('pointercancel', up);
 

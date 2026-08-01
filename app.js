@@ -6,6 +6,8 @@
 
   const money = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const byId = slug => PRODUCTS.find(p => p.slug === slug);
+  // размер показываем только когда он есть из чего выбирать
+  const hasSizes = p => p.sizes.length > 1;
 
   /* ---------- хранилище ---------- */
   const store = {
@@ -20,19 +22,32 @@
       if (hit) hit.qty++; else items.push({ slug, size, qty: 1 });
       store.set('artasimn.basket', items);
     },
-    remove(i) { const items = basket.all(); items.splice(i, 1); store.set('artasimn.basket', items); }
+    remove(i) { const items = basket.all(); items.splice(i, 1); store.set('artasimn.basket', items); },
+    clear() { store.set('artasimn.basket', []); }
   };
-  const marks = {
-    all: () => store.get('artasimn.bookmarks'),
-    has: slug => marks.all().includes(slug),
+  const favourites = {
+    all: () => store.get('artasimn.favourites'),
+    has: slug => favourites.all().includes(slug),
     toggle(slug) {
-      const items = marks.all();
+      const items = favourites.all();
       const i = items.indexOf(slug);
       if (i > -1) items.splice(i, 1); else items.push(slug);
-      store.set('artasimn.bookmarks', items);
+      store.set('artasimn.favourites', items);
       return i === -1;
+    },
+    remove(slug) {
+      const items = favourites.all().filter(s => s !== slug);
+      store.set('artasimn.favourites', items);
     }
   };
+
+  /* оформление заказа: пока без бэкенда — заказ сохраняется локально */
+  function placeOrder(items) {
+    const orders = store.get('artasimn.orders');
+    orders.push({ at: new Date().toISOString(), items });
+    store.set('artasimn.orders', orders);
+  }
+
   /* ---------- вид: с моделями / только товар ---------- */
   let view = localStorage.getItem('artasimn.view') || 'products';
   const setView = v => {
@@ -73,7 +88,7 @@
 
     if (a === 'product') return renderProduct(b);
     if (a === 'basket') return renderBasket();
-    if (a === 'bookmarks') return renderBookmarks();
+    if (a === 'favourites') return renderFavourites();
     if (a === 'p') return renderInfo(b);
 
     let list = PRODUCTS;
@@ -102,9 +117,9 @@
       card.href = `#/product/${p.slug}`;
       card.innerHTML = `
         <div class="card__frame">
-          <img src="${cover(p)}" alt="${p.title}">
+          <div class="photo" role="img" aria-label="${p.title}"></div>
           <div class="card__zones">${p.photos.map(() => '<span></span>').join('')}</div>
-          <button class="card__mark" aria-label="в корзину">
+          <button class="card__mark" aria-label="в избранное" title="в избранное">
             <img src="bookmark.svg" alt="">
           </button>
         </div>
@@ -115,26 +130,28 @@
         </div>`;
 
       // наведение на левую/среднюю/правую часть карточки листает фото
-      const img = card.querySelector('img');
+      const photo = card.querySelector('.photo');
+      const show = src => { photo.style.backgroundImage = `url("${encodeURI(src)}")`; };
+      show(cover(p));
       const dots = [...card.querySelectorAll('.dots i')];
       card.querySelectorAll('.card__zones span').forEach((zone, i) => {
         zone.onmouseenter = () => {
-          img.src = p.photos[i];
+          show(p.photos[i]);
           dots.forEach((d, j) => d.classList.toggle('on', i === j));
         };
       });
       card.onmouseleave = () => {
-        img.src = cover(p);
+        show(cover(p));
         dots.forEach((d, j) => d.classList.toggle('on', j === 0));
       };
 
-      // закладка в углу фото: становится полностью чёрной и кладёт товар в корзину
+      // иконка в углу фото — избранное: чёрная, когда товар добавлен
       const mark = card.querySelector('.card__mark');
+      mark.classList.toggle('is-on', favourites.has(p.slug));
       mark.onclick = e => {
         e.preventDefault();
         e.stopPropagation();
-        mark.classList.add('is-on');
-        basket.add(p.slug, p.sizes[0]);
+        mark.classList.toggle('is-on', favourites.toggle(p.slug));
       };
       grid.appendChild(card);
     });
@@ -163,7 +180,8 @@
     sec.innerHTML = `
       <div class="gallery">
         <div class="gallery__track">
-          ${p.photos.map(src => `<img src="${src}" alt="${p.title}" draggable="false">`).join('')}
+          ${p.photos.map(src => `<div class="gallery__slide photo" role="img" aria-label="${p.title}"
+             style="background-image:url('${encodeURI(src)}')"></div>`).join('')}
         </div>
         <div class="dots">${p.photos.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>
         <button class="gallery__arrow gallery__arrow--prev" aria-label="назад">&#8249;</button>
@@ -172,8 +190,9 @@
       <div class="pdp__info">
         <div class="pdp__title">${p.title}</div>
         <div class="pdp__price">${money(p.price)}</div>
+        ${hasSizes(p) ? `
         <div class="pdp__sizes-label">size</div>
-        <div class="sizes">${p.sizes.map(s => `<button data-size="${s}">${s}</button>`).join('')}</div>
+        <div class="sizes">${p.sizes.map(s => `<button data-size="${s}">${s}</button>`).join('')}</div>` : ''}
         <div class="disclosure">
           <button class="disclosure__btn">description <span class="chev">∨</span></button>
           <div class="disclosure__body" hidden>${p.description}</div>
@@ -218,7 +237,7 @@
     track.addEventListener('pointercancel', up);
 
     /* --- размеры / описание / корзина --- */
-    let size = null;
+    let size = hasSizes(p) ? null : p.sizes[0];
     sec.querySelectorAll('.sizes button').forEach(b => {
       b.onclick = () => {
         size = b.dataset.size;
@@ -234,16 +253,19 @@
     const add = sec.querySelector('.add');
     add.onclick = () => {
       if (!size) {
-        add.textContent = 'выбери размер';
-        setTimeout(() => { add.textContent = '+ add to basket'; }, 1400);
+        flash(add, 'выбери размер', '+ add to basket');
         return;
       }
       basket.add(p.slug, size);
-      add.textContent = '+ добавлено';
-      add.classList.add('is-done');
-      setTimeout(() => { add.textContent = '+ add to basket'; add.classList.remove('is-done'); }, 1400);
+      flash(add, '+ добавлено', '+ add to basket');
     };
     return sec;
+  }
+
+  function flash(btn, text, back) {
+    btn.textContent = text;
+    btn.classList.add('is-done');
+    setTimeout(() => { btn.textContent = back; btn.classList.remove('is-done'); }, 1400);
   }
 
   // адрес в строке браузера следует за вертикальным скроллом товаров
@@ -261,38 +283,73 @@
     }, { passive: true });
   }
 
-  /* ---------- корзина / закладки / тексты ---------- */
+  /* ---------- корзина ---------- */
   function renderBasket() {
     const items = basket.all();
     const box = document.createElement('div');
     box.className = 'plain';
     const total = items.reduce((s, i) => s + (byId(i.slug)?.price || 0) * i.qty, 0);
+
     box.innerHTML = `<h1>корзина</h1>` + (items.length
       ? items.map((i, n) => {
           const p = byId(i.slug); if (!p) return '';
           return `<div class="row">
-            <img src="${p.photos[0]}" alt="">
-            <a href="#/product/${p.slug}">${p.title}</a>
-            <span>${i.size} × ${i.qty}</span>
+            <div class="row__photo photo" style="background-image:url('${encodeURI(p.photos[0])}')" role="img" aria-label="${p.title}"></div>
+            <a class="row__title" href="#/product/${p.slug}">${p.title}</a>
+            <span>${hasSizes(p) ? i.size + ' × ' : '× '}${i.qty}</span>
             <span>${money(p.price * i.qty)}</span>
             <button class="rm" data-i="${n}">убрать</button>
           </div>`;
-        }).join('') + `<div class="total">итого ${money(total)}</div>`
+        }).join('') +
+        `<div class="total">итого ${money(total)}</div>
+         <button class="order" id="order-all">order — заказать всё</button>`
       : `<p class="empty">пусто</p>`);
+
     box.querySelectorAll('.rm').forEach(b => b.onclick = () => { basket.remove(+b.dataset.i); render(); });
+    const orderAll = box.querySelector('#order-all');
+    if (orderAll) orderAll.onclick = () => {
+      placeOrder(basket.all());
+      basket.clear();
+      render();
+      const done = document.createElement('p');
+      done.className = 'done';
+      done.textContent = 'заказ оформлен — мы свяжемся с вами';
+      app.querySelector('.plain').appendChild(done);
+    };
     app.appendChild(box);
   }
 
-  function renderBookmarks() {
-    const list = marks.all().map(byId).filter(Boolean);
-    if (!list.length) {
-      const box = document.createElement('div');
-      box.className = 'plain';
-      box.innerHTML = '<h1>закладки</h1><p class="empty">пусто</p>';
-      app.appendChild(box);
-      return;
-    }
-    renderCatalog(list);
+  /* ---------- избранное ---------- */
+  function renderFavourites() {
+    const list = favourites.all().map(byId).filter(Boolean);
+    const box = document.createElement('div');
+    box.className = 'plain';
+
+    box.innerHTML = `<h1>избранное</h1>` + (list.length
+      ? list.map(p => `<div class="row">
+            <div class="row__photo photo" style="background-image:url('${encodeURI(p.photos[0])}')" role="img" aria-label="${p.title}"></div>
+            <a class="row__title" href="#/product/${p.slug}">${p.title}</a>
+            <span>${money(p.price)}</span>
+            <button class="order order--row" data-order="${p.slug}">order</button>
+            <button class="rm" data-rm="${p.slug}">убрать</button>
+          </div>`).join('') +
+        `<button class="order" id="fav-to-basket">отправить всё в корзину</button>`
+      : `<p class="empty">пусто</p>`);
+
+    // заказать один товар из избранного
+    box.querySelectorAll('[data-order]').forEach(b => b.onclick = () => {
+      const p = byId(b.dataset.order);
+      placeOrder([{ slug: p.slug, size: p.sizes[0], qty: 1 }]);
+      flash(b, 'заказано', 'order');
+    });
+    box.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { favourites.remove(b.dataset.rm); render(); });
+
+    const toBasket = box.querySelector('#fav-to-basket');
+    if (toBasket) toBasket.onclick = () => {
+      list.forEach(p => basket.add(p.slug, p.sizes[0]));
+      flash(toBasket, 'в корзине', 'отправить всё в корзину');
+    };
+    app.appendChild(box);
   }
 
   function renderInfo(key) {

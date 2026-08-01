@@ -158,14 +158,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar,*::-webkit-scrollbar{width:0;hei
   opacity:0;transition:opacity .15s;
 }
 .card:hover .card__mark,.card__mark.is-on{opacity:1}
-.card__mark img{width:16px;height:auto;position:relative;z-index:2}
-.card__mark::after{                /* полностью чёрная иконка, когда товар в избранном */
-  content:'';position:absolute;left:1px;right:1px;top:1px;bottom:1px;
-  background:var(--ink);
-  clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);
-  opacity:0;transition:opacity .15s;
-}
-.card__mark.is-on::after{opacity:1}
+.card__mark img{position:absolute;left:0;top:0;width:16px;height:auto}
+/* закрашенная версия той же иконки — товар в избранном */
+.card__mark-on{opacity:0;transition:opacity .15s}
+.card__mark.is-on .card__mark-off{opacity:0}
+.card__mark.is-on .card__mark-on{opacity:1}
 
 .card__meta{
   margin-top:18px;text-align:center;
@@ -209,9 +206,13 @@ html::-webkit-scrollbar,body::-webkit-scrollbar,*::-webkit-scrollbar{width:0;hei
 }
 .gallery__track::-webkit-scrollbar{display:none}
 .gallery__slide{
+  position:relative;
   flex:0 0 100%;width:100%;height:100%;
   scroll-snap-align:center;
 }
+/* прозрачный слой поверх фото: браузер не считает его картинкой
+   и не показывает свою панель, а жесты долистываются как раньше */
+.gallery__slide .shield{position:absolute;inset:0;display:block}
 .gallery__arrow{
   position:absolute;top:50%;transform:translateY(-50%);
   font-size:22px;line-height:1;padding:10px;opacity:.75;

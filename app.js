@@ -18,9 +18,9 @@
       const items = basket.all();
       const hit = items.find(i => i.slug === slug && i.size === size);
       if (hit) hit.qty++; else items.push({ slug, size, qty: 1 });
-      store.set('artasimn.basket', items); syncCount();
+      store.set('artasimn.basket', items);
     },
-    remove(i) { const items = basket.all(); items.splice(i, 1); store.set('artasimn.basket', items); syncCount(); }
+    remove(i) { const items = basket.all(); items.splice(i, 1); store.set('artasimn.basket', items); }
   };
   const marks = {
     all: () => store.get('artasimn.bookmarks'),
@@ -33,11 +33,6 @@
       return i === -1;
     }
   };
-  function syncCount() {
-    const n = basket.all().reduce((s, i) => s + i.qty, 0);
-    document.getElementById('basket-count').textContent = n;
-  }
-
   /* ---------- вид: с моделями / только товар ---------- */
   let view = localStorage.getItem('artasimn.view') || 'products';
   const setView = v => {
@@ -317,6 +312,5 @@
     if (a === 'product' && document.querySelector('.pdp')) return;
     render();
   });
-  syncCount();
   setView(view);
 })();

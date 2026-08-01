@@ -79,18 +79,12 @@ img{display:block;max-width:100%}
 .icon-btn:hover,.icon-btn.is-active{opacity:1}
 .icon-btn img{width:18px;height:auto}
 .basket-btn img{width:21px}
-.basket-btn__count{
-  position:absolute;left:0;right:0;top:58%;
-  transform:translateY(-42%);
-  text-align:center;font-size:10px;line-height:1;letter-spacing:0;
-}
-
 .logo{
-  display:flex;align-items:flex-end;gap:9px;
+  display:flex;align-items:center;gap:9px;
   margin:0 16px;
 }
 .logo__mark{height:42px;width:auto}
-.logo__www,.logo__com{font-size:13px;letter-spacing:.05em;padding-bottom:9px}
+.logo__www,.logo__com{font-size:13px;letter-spacing:.05em;line-height:1}
 
 /* ---- nav ---- */
 .nav{
@@ -132,9 +126,10 @@ img{display:block;max-width:100%}
   padding:46px 5vw 10px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:120px 4vw;
+  gap:110px 4vw;
+  justify-items:center;
 }
-.card{position:relative;display:block}
+.card{position:relative;display:block;width:100%;max-width:270px}
 .card__frame{
   position:relative;
   aspect-ratio:1/1;              /* строго квадрат */
@@ -207,7 +202,7 @@ img{display:block;max-width:100%}
 .gallery__track::-webkit-scrollbar{display:none}
 .gallery__track img{
   flex:0 0 100%;width:100%;height:100%;
-  object-fit:cover;scroll-snap-align:center;
+  object-fit:contain;scroll-snap-align:center;
   user-select:none;-webkit-user-drag:none;
 }
 .gallery__arrow{
